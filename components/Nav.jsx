@@ -7,17 +7,19 @@ import Image from 'next/image';
 
 
 const Nav = () => {
-  const isUserLoggedIn = true;
+  const {data: session } = useSession();
   const [providers, setProviders] = useState(null);
   const [toggleDropdown, setToggleDropdown] = useState(false)
 
   // only runs at the start
   // will allow to sign in using google and next auth
   useEffect(() => {
-    const setProviders = async () => {
+    const setAppProviders = async () => {
       const response = await getProviders();
       setProviders(response);
     }
+
+    setAppProviders();
   }, [])
 
   return (
@@ -33,9 +35,12 @@ const Nav = () => {
         <p className='logo_text'>Promptopia</p>
       </Link>
 
+
+{/* {alert(providers)} */}
+
       {/* nav */}
       <div className='sm:flex hidden'>
-        {isUserLoggedIn ? (
+        {session?.user ? (
           <div className='flex gap-3 md:gap-5'>
             <Link className='black_btn' href={'/create-prompt'}>
             create
@@ -50,7 +55,7 @@ const Nav = () => {
 
             <Link href={'/profile'}>
               <Image
-                src={'/assets/images/logo.svg'}
+                src={session?.user.image}
                 width={37}
                 height={37}
                 className='rounded-full'
@@ -77,10 +82,10 @@ const Nav = () => {
 
       {/* mobile nav */}
       <div className='sm:hidden flex relative '>
-            {isUserLoggedIn ? (
+            {session?.user ? (
               <div className='flex'>
                   <Image
-                  src={'/assets/images/logo.svg'}
+                  src={session?.user.image}
                   width={37}
                   height={37}
                   className='rounded-full'
