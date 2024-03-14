@@ -50,7 +50,6 @@ const Form = ({
               ...post, tag: e.target.value
             })} 
             placeholder='#tag'
-            required
             className='form_input'
           />
         </label>
